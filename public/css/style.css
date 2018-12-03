@@ -1,0 +1,444 @@
+/*Loader*/
+/************************************************************/
+.RootElementLoader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('../img/load.gif') 50% 50% no-repeat rgba(255,255,255,0.8);
+}
+
+body{
+	font-family: "proxima-nova",'Source Sans Pro',Helvetica,Arial,sans-serif;
+}
+
+.box{
+	background: red;
+	padding: 10px;
+	color: #fff;
+	text-align: center;
+}
+.box1{
+	width: 200px;
+	background: blue;
+}
+.box3{
+	background: black;
+}
+.container{
+	height: 100vh;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 1.5fr 1fr 10fr 1fr;
+	grid-gap: 10px;
+}
+.containerTitle{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.containerSearch{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+}
+.containerContent{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+}
+.containerFooter{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.logo{
+	max-height: 45px;
+	width: 20%;
+}
+.contentButtonLanguages{
+	display: flex;
+	justify-content: center;
+	height: 30px;
+}
+.buttonLanguages{
+	margin: 0 5px;
+}
+
+.elementImg{
+	width: auto;
+	height: 30px;
+}
+
+.elementSearch{
+	margin: 5px 0;
+	width: 100%;
+	height: auto;
+}
+
+.containerData{
+	background-image: url("../img/backdata.jpg");
+	background-position: bottom;
+		background-repeat: no-repeat;
+		background-size: cover;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 120%;
+	perspective: 50000px;
+	transition: perspective 0.1s ease-in-out;
+	order: 2;
+}
+
+.containerFigure{
+	min-width: 350px;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #e60012;
+	padding: 10px 40px;
+	border-radius: 20px;
+	color: white;
+	order: 1;
+	position: relative;
+}
+.tableData{
+	width: 100%;
+}
+
+.tableData figure {
+	box-shadow: -12px 6px 6px 0px  rgba(0,150,200,.3);
+	width: 100%;
+	display: inline-block;
+	background: rgba(0,150,240,0.4);
+	border: 1px solid rgba(0,150,240,.5);
+	border-radius: 10px;
+}
+
+figure{
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+.figureElement img{
+	height: auto;
+	max-width: 300px;
+	max-height: 350px;
+}
+
+.containerCounter{
+	font-weight: 600;
+	top: 18px;
+	left: 44px;
+	position: absolute;
+}
+
+@media all and ( min-width: 600px ){
+	.elementImg{
+		width: auto;
+		height: 40px;
+	}
+	.containerSearch{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: row;
+	}
+	.elementSearch{
+		width: 30%;
+		height: auto;
+	}
+	.containerContent{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: row;
+	}
+	.containerData{
+		background-image: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 45%;
+		perspective: 900px;
+		transition: perspective 0.1s ease-in-out;
+		order: 1;
+	}
+	.containerFigure{
+		overflow: hidden;
+		width: 55%;
+		height: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #e60012;
+		padding: 10px 40px;
+		border-radius: 20px;
+		color: white;
+		order: 2;
+	}
+	.containerData:hover{
+		perspective: 3000px;
+	}
+	.tableData{
+		background-image: url("../img/backdata.jpg");
+		background-position: bottom;
+			background-repeat: no-repeat;
+			background-size: cover;
+			border-radius: 4px;
+		width: 100%;
+		transition: .3s; 
+			transform: rotateY(40deg);
+	}
+
+	.tableData figure {
+		margin-top: 20px;
+		box-shadow: -12px 6px 6px 0px  rgba(0,150,200,.3);
+		width: 100%;
+		padding: 2em;
+		display: inline-block;
+		margin-right: 1em;
+		background: rgba(0,150,240,0.4);
+		border: 1px solid rgba(0,150,240,.5);
+		border-radius: 10px;
+	}
+	figure {
+	    display: block;
+	    margin-block-start: 1em;
+	    margin-block-end: 1em;
+	    margin-inline-start: 40px;
+	    margin-inline-end: 40px;
+	}
+	.figureElement img{
+		height: auto;
+		max-width: 200px;
+	}
+	.containerCounter{
+		font-weight: 600;
+		top: 18px;
+		left: 20px;
+		position: absolute;
+	}
+}
+
+@media all and ( min-width: 800px ){
+	.elementImg{
+		width: auto;
+		height: 50px;
+	}
+	.containerSearch{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: row;
+	}
+	.elementSearch{
+		width: 30%;
+		height: auto;
+	}
+	.containerContent{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: row;
+	}
+	.containerData{
+		background-image: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 45%;
+		perspective: 900px;
+		transition: perspective 0.1s ease-in-out;
+		order: 1;
+	}
+	.containerFigure{
+		overflow: hidden;
+		width: 55%;
+		height: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #e60012;
+		padding: 10px 40px;
+		border-radius: 20px;
+		color: white;
+		order: 2;
+	}
+	.containerData:hover{
+		perspective: 3000px;
+	}
+	.tableData{
+		background-image: url("../img/backdata.jpg");
+		background-position: bottom;
+			background-repeat: no-repeat;
+			background-size: cover;
+			border-radius: 4px;
+		width: 100%;
+		transition: .3s; 
+			transform: rotateY(40deg);
+	}
+
+	.tableData figure {
+		margin-top: 20px;
+		box-shadow: -12px 6px 6px 0px  rgba(0,150,200,.3);
+		width: 100%;
+		padding: 2em;
+		display: inline-block;
+		margin-right: 1em;
+		background: rgba(0,150,240,0.4);
+		border: 1px solid rgba(0,150,240,.5);
+		border-radius: 10px;
+	}
+	figure {
+	    display: block;
+	    margin-block-start: 1em;
+	    margin-block-end: 1em;
+	    margin-inline-start: 40px;
+	    margin-inline-end: 40px;
+	}
+	.figureElement img{
+		height: auto;
+		max-width: 300px;
+	}
+	.containerCounter{
+		font-weight: 600;
+		top: 18px;
+		left: 20px;
+		position: absolute;
+	}
+}
+
+.buttonLanguages{
+	color: white;
+	line-height: 1.2;
+    font-weight: 400;
+    font-size: 12px;
+    padding: 2px 15px;
+    background-color: #e60012;
+    border: unset;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+.buttonLanguages:hover{
+	background-color: #bf0010;
+}
+.buttonLanguages:focus{
+	outline: none;
+}
+.inputSearch{
+	border: solid;
+	border-width: 2px;
+	border-color: #CCC;
+	width: 100%;
+	height: 30px;
+	line-height: 1.2;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 15px;
+    padding-left: 45px;
+}
+.inputSearch::placeholder{
+	color: #CCC;
+}
+.elementSearchContainer{
+	position: relative;
+	width: 87%;
+}
+.elementSearchContainer:hover > .iconSearch{
+	color:#e60012;
+}
+.iconSearch{
+	margin-left: 10px;
+	position: absolute;
+	left: 0;
+	top: 8px;
+	font-size: 22px;
+	color: #CCC;
+	transition: color 0.4s ease-in-out;
+}
+
+.elementSearchTag{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.elementSearchTag>span{
+	color: black;
+	width: 30%;
+	line-height: 1.2;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.elementSearchTag>select{
+	width: 70%;
+	height: 30px;
+	border: solid;
+	border-width: 2px;
+	border-color: #CCC;
+	line-height: 1.2;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 15px;
+}
+
+.containerBranch{
+	color: black;
+}
+
+.tableData .text {
+	color: white;
+	display: flex;
+	justify-content: center;
+	font-size: 20px;
+	width: 100%;
+	padding: 5px 0;
+}
+.tableData .text .name{
+	padding-right: 20px;
+	text-align: right;
+	width: 30%;
+}
+.tableData .text .value{
+	text-align: left;
+	width: 70%;
+	font-weight: 600;
+}
+
+.figureArrow{
+	font-size: 50px;
+}
+
+.figureArrow>i{
+	transition: text-shadow 0.1s ease-in-out;
+	cursor: pointer;
+}
+.figureArrow>i:hover{
+	text-shadow: 0px 6px rgba(0,0,0,0.5);
+}
+
+.figureElement{
+	
+}
+
+.containerSound{
+	padding-left: 20px;
+	cursor: pointer;
+}
+
+.containerSound>i{
+	color: red;
+	font-size: 28px;
+}
