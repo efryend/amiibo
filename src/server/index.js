@@ -11,9 +11,9 @@ import routes from '../shared/utility/Routes'
 
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from 'react-redux';
-import reducer from "../shared/utility/Store";
+import reducer from "../shared/utility/Reducer";
 import createSagaMiddleware from "redux-saga";
-import { watchFetchData } from "../shared/utility/saga";
+import { watchFetchData } from "../shared/utility/Saga";
 
 
 const app = express()

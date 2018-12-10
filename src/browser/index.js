@@ -6,10 +6,10 @@ import App from '../shared/App'
 import { BrowserRouter } from 'react-router-dom'
 
 import { Provider } from 'react-redux';
-import reducer from "../shared/utility/store";
+import reducer from "../shared/utility/Reducer";
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { watchFetchData } from "../shared/utility/saga";
+import { watchFetchData } from "../shared/utility/Saga";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducer, applyMiddleware(sagaMiddleware));
