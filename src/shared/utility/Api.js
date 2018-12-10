@@ -5,8 +5,6 @@ const baseUrl = 'http://www.amiiboapi.com'
 export function fetchAmiiboType () {
 	const encodedURI = encodeURI(`${baseUrl}/api/type`)
 
-	console.log( encodedURI );
-
 	return fetch(encodedURI)
 		.then((data) => { 
 			return data.json() 
@@ -20,8 +18,6 @@ export function fetchAmiiboType () {
 export function fetchAmiiboUniverse () {
 	const encodedURI = encodeURI(`${baseUrl}/api/amiiboseries`)
 
-	console.log( encodedURI );
-
 	return fetch(encodedURI)
 		.then((data) => data.json())
 		.catch((error) => {
@@ -34,9 +30,6 @@ export function fetchAmiiboElements(amiiboType=null, amiiboUniverse=null, amiibo
 
 	var params = '';
 
-	console.log( 'API' );
-	console.log( amiiboType );
-
 	if( ( amiiboType !== null && amiiboType !== '') ){
 		params += concatGet( params )
 		params += `type=${ amiiboType }`
@@ -44,7 +37,6 @@ export function fetchAmiiboElements(amiiboType=null, amiiboUniverse=null, amiibo
 
 	const encodedURI = encodeURI(`${baseUrl}/api/amiibo/${ params }`)
 
-	console.log( 'hola' )
 	console.log( encodedURI );
 
 	return fetch(encodedURI)

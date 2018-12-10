@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from "react-redux"
 
 class ElementData extends Component {
 
@@ -33,14 +34,13 @@ class ElementData extends Component {
 
     this.state = {
       amiiboElements,
-      amiiboIndex: 0,
       animateClass: ''
     }
   }
 
   componentDidUpdate (prevProps, prevState) {
 
-    if (prevState.amiiboIndex !== this.state.amiiboIndex) {
+    if ( prevProps.amiiboIndex !== this.props.amiiboIndex) {
       const state = this.state
       state['animateClass'] = 'figure-animation';
       setTimeout(function() {
@@ -50,24 +50,21 @@ class ElementData extends Component {
 
     if (prevProps.amiiboElements !== this.props.amiiboElements) {
 
+      this.props.onIndexClear();
+
       this.setState({
         amiiboElements: this.props.amiiboElements,
-        amiiboIndex: 0,
       })
     }
   }
 
   handleClickLeft() {
 
-    var amiiboIndex = this.state.amiiboIndex - 1
-    var amiiboElements = this.state.amiiboElements
+    let amiiboElements = this.state.amiiboElements;
 
-    if( amiiboIndex < 0 ){
-      amiiboIndex = amiiboElements.length - 1
-    }
+    this.props.onIndexDown(1, amiiboElements.length);
 
     this.setState(() => ({
-      amiiboIndex: amiiboIndex,
       animateClass: ''
     }))
 
@@ -75,15 +72,11 @@ class ElementData extends Component {
 
   handleClickRight() {
 
-    var amiiboIndex = this.state.amiiboIndex + 1
-    var amiiboElements = this.state.amiiboElements
+    let amiiboElements = this.state.amiiboElements
 
-    if( amiiboIndex === amiiboElements.length){
-      amiiboIndex = 0
-    }
+    this.props.onIndexUp(1, amiiboElements.length);
 
     this.setState(() => ({
-      amiiboIndex: amiiboIndex,
       animateClass: ''
     }))
 
@@ -94,7 +87,7 @@ class ElementData extends Component {
     let animateClass = this.state.animateClass
 
     let totalEle  = this.state.amiiboElements.length
-    let index     = this.state.amiiboIndex
+    let index     = this.props.amiiboIndex
     let name      = this.state.amiiboElements[index].name
     let univers   = this.state.amiiboElements[index].gameSeries
     let character = this.state.amiiboElements[index].character
@@ -175,4 +168,21 @@ class ElementData extends Component {
   }
 }
 
-export default ElementData
+const mapStateToProps = state => {
+  return {
+    amiiboIndex: state.amiiboIndex
+  };
+};
+
+const mapDispachToProps = dispatch => {
+  return {
+    onIndexClear: ( ) => dispatch({ type: "INDEX_CLEAR" }),
+    onIndexUp: ( index, total ) => dispatch({ type: "INDEX_UP", value: { index, total } }),
+    onIndexDown: ( index, total ) => dispatch({ type: "INDEX_DOWN", value:{ index, total } })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(ElementData);

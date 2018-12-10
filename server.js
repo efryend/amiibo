@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,10 +73,16 @@ module.exports = require("react");
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-router-dom");
+module.exports = require("react-redux");
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -86,11 +92,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Index = __webpack_require__(10);
+var _Index = __webpack_require__(13);
 
 var _Index2 = _interopRequireDefault(_Index);
 
-var _Api = __webpack_require__(17);
+var _Api = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -115,23 +121,31 @@ var routes = [{
 exports.default = routes;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("redux-saga");
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _express = __webpack_require__(5);
+__webpack_require__(7);
+
+var _express = __webpack_require__(8);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _cors = __webpack_require__(6);
+var _cors = __webpack_require__(9);
 
 var _cors2 = _interopRequireDefault(_cors);
 
@@ -139,21 +153,35 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(7);
+var _server = __webpack_require__(10);
 
-var _reactRouterDom = __webpack_require__(1);
+var _reactRouterDom = __webpack_require__(2);
 
-var _serializeJavascript = __webpack_require__(8);
+var _serializeJavascript = __webpack_require__(11);
 
 var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
 
-var _App = __webpack_require__(9);
+var _App = __webpack_require__(12);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _Routes = __webpack_require__(2);
+var _Routes = __webpack_require__(3);
 
 var _Routes2 = _interopRequireDefault(_Routes);
+
+var _redux = __webpack_require__(22);
+
+var _reactRedux = __webpack_require__(1);
+
+var _Store = __webpack_require__(23);
+
+var _Store2 = _interopRequireDefault(_Store);
+
+var _reduxSaga = __webpack_require__(5);
+
+var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
+
+var _saga = __webpack_require__(24);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -193,13 +221,21 @@ app.get("*", function (req, res, next) {
 
     var context = { contextOne: contextOne, contextTwo: contextTwo, contextThree: contextThree };
 
+    var sagaMiddleware = (0, _reduxSaga2.default)();
+    var store = (0, _redux.createStore)(_Store2.default, (0, _redux.applyMiddleware)(sagaMiddleware));
+    sagaMiddleware.run(_saga.watchFetchData);
+
     var markup = (0, _server.renderToString)(_react2.default.createElement(
-      _reactRouterDom.StaticRouter,
-      { location: req.url, context: context },
-      _react2.default.createElement(_App2.default, null)
+      _reactRedux.Provider,
+      { store: store },
+      _react2.default.createElement(
+        _reactRouterDom.StaticRouter,
+        { location: req.url, context: context },
+        _react2.default.createElement(_App2.default, null)
+      )
     ));
 
-    res.send("\n      <!DOCTYPE html>\n      <html>\n        <head>\n          <title>Amiibo</title>\n          <meta charset=\"utf-8\">\n          <link rel=\"shortcut icon\" href=\"img/mario.ico\">\n          <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0\">\n          <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n\n          <link href=\"https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700|Roboto:100,300,400,400i,500,700&amp;subset=cyrillic\" rel=\"stylesheet\">\n          <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.5.0/css/all.css\" integrity=\"sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU\" crossorigin=\"anonymous\">\n\n          <script src=\"/bundle.js\" defer></script>\n          <script>window.__INITIAL_DATA__ = " + (0, _serializeJavascript2.default)(context) + "</script>\n          <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/style.css\">\n          <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/animation.css\">\n        </head>\n\n        <body>\n          <div class=\"\" id=\"rootElementLoader\"></div>\n          <div id=\"app\">" + markup + "</div>\n        </body>\n      </html>\n    ");
+    res.send("\n      <!DOCTYPE html>\n      <html>\n        <head>\n          <title>Amiibo</title>\n          <meta charset=\"utf-8\">\n          <link rel=\"shortcut icon\" href=\"img/mario.ico\">\n          <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0 shrink-to-fit=no\">\n          <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n\n          <link href=\"https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700|Roboto:100,300,400,400i,500,700&amp;subset=cyrillic\" rel=\"stylesheet\">\n          <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.5.0/css/all.css\" integrity=\"sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU\" crossorigin=\"anonymous\">\n\n          <script src=\"/bundle.js\" defer></script>\n          <script>window.__INITIAL_DATA__ = " + (0, _serializeJavascript2.default)(context) + "</script>\n          <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/style.css\">\n          <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/animation.css\">\n        </head>\n\n        <body>\n          <div class=\"\" id=\"rootElementLoader\"></div>\n          <div id=\"app\">" + markup + "</div>\n        </body>\n      </html>\n    ");
   }).catch(next);
 });
 
@@ -215,31 +251,37 @@ app.listen(3000, function () {
 */
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-module.exports = require("express");
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = require("cors");
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-dom/server");
+module.exports = require("babel-polyfill");
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("serialize-javascript");
+module.exports = require("express");
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("cors");
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-dom/server");
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -257,13 +299,13 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Routes = __webpack_require__(2);
+var _Routes = __webpack_require__(3);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
-var _reactRouterDom = __webpack_require__(1);
+var _reactRouterDom = __webpack_require__(2);
 
-var _NoMatch = __webpack_require__(18);
+var _NoMatch = __webpack_require__(21);
 
 var _NoMatch2 = _interopRequireDefault(_NoMatch);
 
@@ -319,7 +361,7 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -335,27 +377,29 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _ElementTitle = __webpack_require__(11);
+var _reactRedux = __webpack_require__(1);
+
+var _ElementTitle = __webpack_require__(14);
 
 var _ElementTitle2 = _interopRequireDefault(_ElementTitle);
 
-var _ElementSearch = __webpack_require__(12);
+var _ElementSearch = __webpack_require__(15);
 
 var _ElementSearch2 = _interopRequireDefault(_ElementSearch);
 
-var _ElementData = __webpack_require__(13);
+var _ElementData = __webpack_require__(16);
 
 var _ElementData2 = _interopRequireDefault(_ElementData);
 
-var _ElementFooter = __webpack_require__(14);
+var _ElementFooter = __webpack_require__(17);
 
 var _ElementFooter2 = _interopRequireDefault(_ElementFooter);
 
-var _isomorphicFetch = __webpack_require__(3);
+var _isomorphicFetch = __webpack_require__(4);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
-var _Languages = __webpack_require__(16);
+var _Languages = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -382,8 +426,6 @@ var Home = function (_Component) {
     _this.handleChangeSearch = _this.handleChangeSearch.bind(_this);
     _this.handleChangeLanguage = _this.handleChangeLanguage.bind(_this);
 
-    _this.funFetchAmiiboElements = _this.funFetchAmiiboElements.bind(_this);
-
     var amiiboType = void 0;
     var amiiboUniverse = void 0;
     var amiiboElements = void 0;
@@ -392,28 +434,13 @@ var Home = function (_Component) {
 
     _this.state = {
       languages: languages,
-      loading: false,
       amiiboType: amiiboType,
       amiiboUniverse: amiiboUniverse,
       amiiboElements: amiiboElements,
       selectType: null,
       selectUniverse: null,
-      selectName: null,
-      nofFound: [{
-        image: '/img/notfound.png',
-        name: '-',
-        gameSeries: '-',
-        character: '-',
-        type: '-',
-        release: {
-          'au': '-',
-          'eu': '-',
-          'jp': '-',
-          'na': '-'
-        }
-      }]
+      selectName: null
     };
-
     return _this;
   }
 
@@ -422,19 +449,6 @@ var Home = function (_Component) {
     value: function componentDidMount() {
       this.fetchAmiiboStart();
       this.fetchAmiiboElements();
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-
-      if (prevState.loading !== this.state.loading) {
-
-        var loading = this.state.loading;
-
-        setTimeout(function () {
-          document.getElementById("rootElementLoader").classList.remove("RootElementLoader");
-        }.bind(this), 500);
-      }
     }
   }, {
     key: 'fetchAmiiboStart',
@@ -460,35 +474,18 @@ var Home = function (_Component) {
   }, {
     key: 'fetchAmiiboElements',
     value: function fetchAmiiboElements() {
-      var _this3 = this;
-
-      this.setState(function () {
-        return {
-          loading: true
-        };
-      });
-
-      document.getElementById("rootElementLoader").classList.add("RootElementLoader");
 
       var amiiboType = this.state.selectType;
       var amiiboUniverse = this.state.selectUniverse;
       var amiiboName = this.state.selectName;
 
-      this.funFetchAmiiboElements(amiiboType, amiiboUniverse, amiiboName).then(function (data) {
-        return _this3.setState(function () {
-          return {
-            amiiboElements: typeof data.amiibo === 'undefined' ? _this3.state.nofFound : data.amiibo,
-            loading: false
-          };
-        });
-      }).catch(function (error) {
-        return _this3.setState(function () {
-          return {
-            amiiboElements: _this3.state.nofFound,
-            loading: false
-          };
-        });
-      });
+      var values = {
+        amiiboType: amiiboType,
+        amiiboUniverse: amiiboUniverse,
+        amiiboName: amiiboName
+      };
+
+      this.props.onRequestData(values);
     }
   }, {
     key: 'handleChangeType',
@@ -535,52 +532,6 @@ var Home = function (_Component) {
       this.setState(state);
     }
   }, {
-    key: 'funFetchAmiiboElements',
-    value: function funFetchAmiiboElements() {
-      var amiiboType = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var amiiboUniverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var amiiboName = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-
-      var params = '';
-
-      if (amiiboType !== null && amiiboType !== '') {
-        params += this.concatGet(params);
-        params += 'type=' + amiiboType;
-      }
-
-      if (amiiboUniverse !== null && amiiboUniverse !== '') {
-        params += this.concatGet(params);
-        params += 'gameseries=' + amiiboUniverse;
-      }
-
-      if (amiiboName !== null && amiiboName !== '') {
-        params += this.concatGet(params);
-        params += 'name=' + amiiboName;
-      }
-
-      var encodedURI = encodeURI(baseUrl + '/api/amiibo/' + params);
-
-      return (0, _isomorphicFetch2.default)(encodedURI).then(function (data) {
-        return data.json();
-      }).catch(function (error) {
-        console.warn(error);
-        return null;
-      });
-    }
-  }, {
-    key: 'concatGet',
-    value: function concatGet(string) {
-
-      var newParam = '&';
-
-      if (string.length === 0) {
-        newParam = '?';
-      }
-
-      return newParam;
-    }
-  }, {
     key: 'render',
     value: function render() {
 
@@ -590,11 +541,10 @@ var Home = function (_Component) {
 
       var amiiboType = this.state.amiiboType;
       var amiiboUniverse = this.state.amiiboUniverse;
-      var amiiboElements = this.state.amiiboElements;
+      var amiiboElements = this.props.amiiboElements;
       var handleChangeType = this.handleChangeType;
       var handleChangeUniverse = this.handleChangeUniverse;
       var handleChangeSearch = this.handleChangeSearch;
-      var loading = this.state.loading;
 
       var languages = this.state.languages;
 
@@ -626,10 +576,30 @@ var Home = function (_Component) {
   return Home;
 }(_react.Component);
 
-exports.default = Home;
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    successful: state.successful,
+    amiiboElements: state.data
+  };
+};
+
+var mapDispachToProps = function mapDispachToProps(dispatch) {
+  return {
+    onRequestData: function onRequestData(amiiboType, amiiboUniverse, amiiboName) {
+      return dispatch({
+        type: "ELEMENTS_REQUESTING",
+        amiiboType: amiiboType,
+        amiiboUniverse: amiiboUniverse,
+        amiiboName: amiiboName
+      });
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispachToProps)(Home);
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -717,7 +687,7 @@ var ElementTitle = function (_Component) {
 exports.default = ElementTitle;
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -883,7 +853,7 @@ var ElementSearch = function (_Component) {
 exports.default = ElementSearch;
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -898,6 +868,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -943,7 +915,6 @@ var ElementData = function (_Component) {
 
     _this.state = {
       amiiboElements: amiiboElements,
-      amiiboIndex: 0,
       animateClass: ''
     };
     return _this;
@@ -953,7 +924,7 @@ var ElementData = function (_Component) {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
 
-      if (prevState.amiiboIndex !== this.state.amiiboIndex) {
+      if (prevProps.amiiboIndex !== this.props.amiiboIndex) {
         var state = this.state;
         state['animateClass'] = 'figure-animation';
         setTimeout(function () {
@@ -963,9 +934,10 @@ var ElementData = function (_Component) {
 
       if (prevProps.amiiboElements !== this.props.amiiboElements) {
 
+        this.props.onIndexClear();
+
         this.setState({
-          amiiboElements: this.props.amiiboElements,
-          amiiboIndex: 0
+          amiiboElements: this.props.amiiboElements
         });
       }
     }
@@ -973,16 +945,12 @@ var ElementData = function (_Component) {
     key: 'handleClickLeft',
     value: function handleClickLeft() {
 
-      var amiiboIndex = this.state.amiiboIndex - 1;
       var amiiboElements = this.state.amiiboElements;
 
-      if (amiiboIndex < 0) {
-        amiiboIndex = amiiboElements.length - 1;
-      }
+      this.props.onIndexDown(1, amiiboElements.length);
 
       this.setState(function () {
         return {
-          amiiboIndex: amiiboIndex,
           animateClass: ''
         };
       });
@@ -991,16 +959,12 @@ var ElementData = function (_Component) {
     key: 'handleClickRight',
     value: function handleClickRight() {
 
-      var amiiboIndex = this.state.amiiboIndex + 1;
       var amiiboElements = this.state.amiiboElements;
 
-      if (amiiboIndex === amiiboElements.length) {
-        amiiboIndex = 0;
-      }
+      this.props.onIndexUp(1, amiiboElements.length);
 
       this.setState(function () {
         return {
-          amiiboIndex: amiiboIndex,
           animateClass: ''
         };
       });
@@ -1012,7 +976,7 @@ var ElementData = function (_Component) {
       var animateClass = this.state.animateClass;
 
       var totalEle = this.state.amiiboElements.length;
-      var index = this.state.amiiboIndex;
+      var index = this.props.amiiboIndex;
       var name = this.state.amiiboElements[index].name;
       var univers = this.state.amiiboElements[index].gameSeries;
       var character = this.state.amiiboElements[index].character;
@@ -1169,10 +1133,30 @@ var ElementData = function (_Component) {
   return ElementData;
 }(_react.Component);
 
-exports.default = ElementData;
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    amiiboIndex: state.amiiboIndex
+  };
+};
+
+var mapDispachToProps = function mapDispachToProps(dispatch) {
+  return {
+    onIndexClear: function onIndexClear() {
+      return dispatch({ type: "INDEX_CLEAR" });
+    },
+    onIndexUp: function onIndexUp(index, total) {
+      return dispatch({ type: "INDEX_UP", value: { index: index, total: total } });
+    },
+    onIndexDown: function onIndexDown(index, total) {
+      return dispatch({ type: "INDEX_DOWN", value: { index: index, total: total } });
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispachToProps)(ElementData);
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1188,7 +1172,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSound = __webpack_require__(15);
+var _reactSound = __webpack_require__(18);
 
 var _reactSound2 = _interopRequireDefault(_reactSound);
 
@@ -1288,13 +1272,13 @@ var ElementFooter = function (_Component) {
 exports.default = ElementFooter;
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-sound");
 
 /***/ }),
-/* 16 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1336,7 +1320,7 @@ function catalogueLanguages(languages) {
 }
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1349,7 +1333,7 @@ exports.fetchAmiiboType = fetchAmiiboType;
 exports.fetchAmiiboUniverse = fetchAmiiboUniverse;
 exports.fetchAmiiboElements = fetchAmiiboElements;
 
-var _isomorphicFetch = __webpack_require__(3);
+var _isomorphicFetch = __webpack_require__(4);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
@@ -1359,8 +1343,6 @@ var baseUrl = 'http://www.amiiboapi.com';
 
 function fetchAmiiboType() {
 	var encodedURI = encodeURI(baseUrl + '/api/type');
-
-	console.log(encodedURI);
 
 	return (0, _isomorphicFetch2.default)(encodedURI).then(function (data) {
 		return data.json();
@@ -1372,8 +1354,6 @@ function fetchAmiiboType() {
 
 function fetchAmiiboUniverse() {
 	var encodedURI = encodeURI(baseUrl + '/api/amiiboseries');
-
-	console.log(encodedURI);
 
 	return (0, _isomorphicFetch2.default)(encodedURI).then(function (data) {
 		return data.json();
@@ -1391,9 +1371,6 @@ function fetchAmiiboElements() {
 
 	var params = '';
 
-	console.log('API');
-	console.log(amiiboType);
-
 	if (amiiboType !== null && amiiboType !== '') {
 		params += concatGet(params);
 		params += 'type=' + amiiboType;
@@ -1401,7 +1378,6 @@ function fetchAmiiboElements() {
 
 	var encodedURI = encodeURI(baseUrl + '/api/amiibo/' + params);
 
-	console.log('hola');
 	console.log(encodedURI);
 
 	return (0, _isomorphicFetch2.default)(encodedURI).then(function (data) {
@@ -1424,7 +1400,7 @@ function concatGet(string) {
 }
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1448,6 +1424,313 @@ function NoMatch() {
     'Not found'
   );
 }
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("redux");
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var initialState = {
+  amiiboIndex: 0,
+  successful: false,
+  data: [{
+    name: '-',
+    gameSeries: '-',
+    character: '-',
+    type: '-',
+    release: {
+      'au': '-',
+      'eu': '-',
+      'jp': '-',
+      'na': '-'
+    }
+  }]
+};
+
+var reducer = function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+  var newState = _extends({}, state);
+
+  switch (action.type) {
+
+    case "INDEX_UP":
+
+      var index = action.value.index;
+      var total = action.value.total;
+
+      if (newState.amiiboIndex < total - 1) {
+        newState.amiiboIndex += index;
+      } else {
+        newState.amiiboIndex = 0;
+      }
+      break;
+
+    case "INDEX_DOWN":
+
+      var index = action.value.index;
+      var total = action.value.total;
+
+      if (newState.amiiboIndex > 0) {
+        newState.amiiboIndex -= index;
+      } else {
+        newState.amiiboIndex = total - 1;
+      }
+      break;
+
+    case "INDEX_CLEAR":
+
+      newState.amiiboIndex = 0;
+
+      break;
+
+    case 'ELEMENTS_REQUESTING':
+      newState.successful = false;
+      newState.data = [];
+
+      break;
+
+    case 'DATA_SUCCESS':
+
+      newState.successful = true;
+      newState.data = action.data;
+
+      break;
+  }
+  return newState;
+};
+
+exports.default = reducer;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.watchFetchData = watchFetchData;
+
+__webpack_require__(25);
+
+var _reduxSaga = __webpack_require__(5);
+
+var _effects = __webpack_require__(26);
+
+var _marked = /*#__PURE__*/regeneratorRuntime.mark(indexUpAsync),
+    _marked2 = /*#__PURE__*/regeneratorRuntime.mark(dataFlow),
+    _marked3 = /*#__PURE__*/regeneratorRuntime.mark(watchFetchData);
+
+function indexUpAsync() {
+  return regeneratorRuntime.wrap(function indexUpAsync$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return (0, _reduxSaga.delay)(4000);
+
+        case 2:
+          _context.next = 4;
+          return (0, _effects.put)({ type: "INDEX_UP_ASYNC", value: 1 });
+
+        case 4:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _marked, this);
+}
+
+function getAmiiboData(data) {
+  var _this = this;
+
+  document.getElementById("rootElementLoader").classList.add("RootElementLoader");
+
+  var amiiboType = data.amiiboType;
+  var amiiboUniverse = data.amiiboUniverse;
+  var amiiboName = data.amiiboName;
+
+  var params = '';
+
+  if (amiiboType !== null && amiiboType !== '' && typeof amiiboType !== 'undefined') {
+    params += concatGet(params);
+    params += "type=" + amiiboType;
+  }
+
+  if (amiiboUniverse !== null && amiiboUniverse !== '' && typeof amiiboUniverse !== 'undefined') {
+    params += concatGet(params);
+    params += "gameseries=" + amiiboUniverse;
+  }
+
+  if (amiiboName !== null && amiiboName !== '' && typeof amiiboName !== 'undefined') {
+    params += concatGet(params);
+    params += "name=" + amiiboName;
+  }
+
+  var baseUrl = 'http://www.amiiboapi.com';
+  var encodedURI = encodeURI(baseUrl + "/api/amiibo/" + params);
+
+  return fetch(encodedURI).then(function (response) {
+    console.log('BienPromise');
+    setTimeout(function () {
+      document.getElementById("rootElementLoader").classList.remove("RootElementLoader");
+    }.bind(_this), 500);
+    if (!response.ok) throw Error(response.statusText);
+    return response;
+  }).then(function (response) {
+    return response.json();
+  }).then(function (json) {
+    return json;
+  }).catch(function (error) {
+    console.log('MalPromise');
+    console.warn(error);
+    return null;
+  });
+}
+
+function dataFlow(request) {
+  var data, dataEmpty;
+  return regeneratorRuntime.wrap(function dataFlow$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          data = void 0;
+          dataEmpty = [{
+            image: '/img/notfound.png',
+            name: '-',
+            gameSeries: '-',
+            character: '-',
+            type: '-',
+            release: {
+              'au': '-',
+              'eu': '-',
+              'jp': '-',
+              'na': '-'
+            }
+          }];
+          _context2.prev = 2;
+
+
+          console.log('Bien');
+          _context2.next = 6;
+          return (0, _effects.put)({ type: 'DATA_SUCCESS', data: dataEmpty });
+
+        case 6:
+          _context2.next = 8;
+          return (0, _effects.call)(getAmiiboData, request);
+
+        case 8:
+          data = _context2.sent;
+          _context2.next = 11;
+          return (0, _effects.put)({ type: 'DATA_SUCCESS', data: data.amiibo });
+
+        case 11:
+          _context2.next = 18;
+          break;
+
+        case 13:
+          _context2.prev = 13;
+          _context2.t0 = _context2["catch"](2);
+
+          console.log('Mal');
+          _context2.next = 18;
+          return (0, _effects.put)({ type: 'DATA_SUCCESS', data: dataEmpty });
+
+        case 18:
+          return _context2.abrupt("return", true);
+
+        case 19:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, _marked2, this, [[2, 13]]);
+}
+
+function concatGet(string) {
+
+  var newParam = '&';
+
+  if (string.length === 0) {
+    newParam = '?';
+  }
+
+  return newParam;
+}
+
+/*
+export function* watchAgeUp() {
+
+  yield takeLatest("INDEX_UP_UP", indexUpAsync);
+
+}
+*/
+
+function watchFetchData() {
+  var _ref, amiiboType, amiiboUniverse, amiiboName, task;
+
+  return regeneratorRuntime.wrap(function watchFetchData$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          if (false) {
+            _context3.next = 12;
+            break;
+          }
+
+          _context3.next = 3;
+          return (0, _effects.take)('ELEMENTS_REQUESTING');
+
+        case 3:
+          _ref = _context3.sent;
+          amiiboType = _ref.amiiboType;
+          amiiboUniverse = _ref.amiiboUniverse;
+          amiiboName = _ref.amiiboName;
+          _context3.next = 9;
+          return (0, _effects.fork)(dataFlow, amiiboType, amiiboUniverse, amiiboName);
+
+        case 9:
+          task = _context3.sent;
+          _context3.next = 0;
+          break;
+
+        case 12:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  }, _marked3, this);
+}
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("regenerator-runtime/runtime");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("redux-saga/effects");
 
 /***/ })
 /******/ ]);

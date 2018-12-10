@@ -7,7 +7,6 @@ class App extends Component {
   render() {
     return (
       <div>
-
         <Switch>
           {routes.map(({ path, exact, component: Component, ...rest }) => (
             <Route key={path} path={path} exact={exact} render={(props) => (
@@ -21,4 +20,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default App;

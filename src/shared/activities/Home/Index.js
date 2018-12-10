@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from "react-redux"
 
 import ElementTitle   from './Elements/ElementTitle'
 import ElementSearch  from './Elements/ElementSearch'
@@ -22,8 +23,6 @@ class Home extends Component {
     this.handleChangeSearch   = this.handleChangeSearch.bind(this)
     this.handleChangeLanguage = this.handleChangeLanguage.bind(this)
 
-    this.funFetchAmiiboElements = this.funFetchAmiiboElements.bind(this)
-
     let amiiboType
     let amiiboUniverse
     let amiiboElements
@@ -32,48 +31,18 @@ class Home extends Component {
 
     this.state = {
       languages,
-      loading: false,
       amiiboType,
       amiiboUniverse,
       amiiboElements,
       selectType: null,
       selectUniverse: null,
       selectName: null,
-      nofFound: [
-      {
-        image: '/img/notfound.png',
-        name: '-',
-        gameSeries: '-',
-        character:'-',
-        type: '-',
-        release:{
-          'au': '-',
-          'eu': '-',
-          'jp': '-',
-          'na': '-'
-        }
-      }
-      ]
     }
-
   }
 
   componentDidMount(){
     this.fetchAmiiboStart()
     this.fetchAmiiboElements()
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-
-    if (prevState.loading !== this.state.loading) {
-      
-      var loading = this.state.loading
-
-      setTimeout(function() {
-        document.getElementById("rootElementLoader").classList.remove("RootElementLoader");
-      }.bind(this), 500)
-
-    }
   }
 
   fetchAmiiboStart() {
@@ -91,25 +60,18 @@ class Home extends Component {
 
   fetchAmiiboElements() {
 
-    this.setState(() => ({
-      loading: true
-    }))
-
-    document.getElementById("rootElementLoader").classList.add("RootElementLoader");
-
     var amiiboType      = this.state.selectType
     var amiiboUniverse  = this.state.selectUniverse
     var amiiboName      = this.state.selectName
 
-    this.funFetchAmiiboElements( amiiboType, amiiboUniverse, amiiboName )
-      .then((data) => this.setState(() => ({
-        amiiboElements: typeof( data.amiibo ) === 'undefined' ? this.state.nofFound : data.amiibo,
-        loading: false,
-      })))
-      .catch((error) => this.setState(() => ({
-        amiiboElements: this.state.nofFound,
-        loading: false,
-      })))
+    var values = {
+      amiiboType,
+      amiiboUniverse,
+      amiiboName
+    };
+
+    this.props.onRequestData(values)
+
   }
 
   handleChangeType( e ){
@@ -156,46 +118,6 @@ class Home extends Component {
 
   }
 
-  funFetchAmiiboElements(amiiboType=null, amiiboUniverse=null, amiiboName=null) {
-
-    var params = '';
-
-    if( ( amiiboType !== null && amiiboType !== '') ){
-      params += this.concatGet( params )
-      params += `type=${ amiiboType }`
-    }
-
-    if( ( amiiboUniverse !== null && amiiboUniverse !== '') ){
-      params += this.concatGet( params )
-      params += `gameseries=${ amiiboUniverse }`
-    }
-
-    if( ( amiiboName !== null && amiiboName !== '') ){
-      params += this.concatGet( params )
-      params += `name=${ amiiboName }`
-    }
-
-    const encodedURI = encodeURI(`${baseUrl}/api/amiibo/${ params }`)
-
-    return fetch(encodedURI)
-      .then((data) => data.json())
-      .catch((error) => {
-        console.warn(error)
-        return null
-    });
-  }
-
-  concatGet( string ) {
-
-    var newParam = '&'
-
-    if( string.length === 0 ){
-      newParam = '?'
-    }
-
-    return newParam
-  }
-
   render() {
 
     let staticContext = this.props.staticContext
@@ -204,11 +126,10 @@ class Home extends Component {
 
     let amiiboType = this.state.amiiboType
     let amiiboUniverse = this.state.amiiboUniverse
-    let amiiboElements = this.state.amiiboElements
+    let amiiboElements = this.props.amiiboElements
     let handleChangeType = this.handleChangeType
     let handleChangeUniverse = this.handleChangeUniverse
     let handleChangeSearch = this.handleChangeSearch
-    let loading = this.state.loading
 
     let languages = this.state.languages
 
@@ -240,4 +161,22 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => {
+  return {
+    successful: state.successful,
+    amiiboElements: state.data
+  };
+};
+
+const mapDispachToProps = dispatch => {
+  return {
+    onRequestData: ( amiiboType, amiiboUniverse, amiiboName ) => dispatch({ 
+      type: "ELEMENTS_REQUESTING", 
+      amiiboType,
+      amiiboUniverse,
+      amiiboName
+    })
+  };
+};
+
+export default connect(mapStateToProps, mapDispachToProps)(Home)

@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 import express from "express"
 import cors from "cors"
 import React from "react"
@@ -6,6 +8,13 @@ import { StaticRouter, matchPath } from "react-router-dom"
 import serialize from "serialize-javascript"
 import App from '../shared/App'
 import routes from '../shared/utility/Routes'
+
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from 'react-redux';
+import reducer from "../shared/utility/Store";
+import createSagaMiddleware from "redux-saga";
+import { watchFetchData } from "../shared/utility/saga";
+
 
 const app = express()
 
@@ -46,11 +55,17 @@ app.get("*", (req, res, next) => {
   Promise.all([promiseOne, promiseTwo, promiseThree]).then(values => {
 
     const context = { contextOne, contextTwo, contextThree }
+    
+    const sagaMiddleware = createSagaMiddleware();
+    const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+    sagaMiddleware.run(watchFetchData);
 
     const markup = renderToString(
+      <Provider store={store}>
       <StaticRouter location={req.url} context={context}>
         <App />
       </StaticRouter>
+      </Provider>
     )
 
     res.send(`
@@ -60,7 +75,7 @@ app.get("*", (req, res, next) => {
           <title>Amiibo</title>
           <meta charset="utf-8">
           <link rel="shortcut icon" href="img/mario.ico">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0 shrink-to-fit=no">
           <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
           <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700|Roboto:100,300,400,400i,500,700&amp;subset=cyrillic" rel="stylesheet">

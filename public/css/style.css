@@ -28,6 +28,7 @@ body{
 	background: black;
 }
 .container{
+	overflow-x: hidden;
 	height: 100vh;
 	display: grid;
 	grid-template-columns: 100%;
@@ -88,13 +89,14 @@ body{
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	width: 120%;
+	width: 100%;
 	perspective: 50000px;
 	transition: perspective 0.1s ease-in-out;
 	order: 2;
 }
 
 .containerFigure{
+	min-height: 500px;
 	min-width: 350px;
 	overflow: hidden;
 	width: 100%;
@@ -131,7 +133,7 @@ figure{
 
 .figureElement img{
 	height: auto;
-	max-width: 300px;
+	max-width: 250px;
 	max-height: 350px;
 }
 
@@ -140,6 +142,10 @@ figure{
 	top: 18px;
 	left: 44px;
 	position: absolute;
+}
+
+.containerData:hover{
+	perspective: 50000px;
 }
 
 @media all and ( min-width: 600px ){
