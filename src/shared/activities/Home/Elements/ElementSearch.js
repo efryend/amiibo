@@ -5,6 +5,8 @@ class ElementSearch extends Component {
   constructor(props) {
     super(props)
 
+    this.handleKeySearch = this.handleKeySearch.bind(this)
+
     let amiiboType
     if (__isBrowser__) {
       var temp = window.__INITIAL_DATA__
@@ -23,21 +25,19 @@ class ElementSearch extends Component {
 
     this.state = {
       amiiboType,
-      amiiboUniverse
+      amiiboUniverse,
     }
 
   }
 
-  componentDidMount(){
+  handleKeySearch( element ){
 
     let handleChangeSearch = this.props.handleChangeSearch
 
-    const node = document.getElementById("idSearch");
-    node.addEventListener("keyup", function(event) {
-        if (event.key === "Enter") {
-            handleChangeSearch( node.value )
-        }
-    });
+    if (element.key === 'Enter') {
+      console.log( element.target.value )
+      handleChangeSearch( element.target.value )
+    }
 
   }
 
@@ -69,7 +69,7 @@ class ElementSearch extends Component {
         <div className="elementSearch">
           <div className="elementSearchContainer">
             <i className="fas fa-search iconSearch"></i>
-            <input className="inputSearch" type="text" name="search" placeholder={ languages.searchPlaceSerach } id="idSearch"/>          
+            <input onKeyPress={ this.handleKeySearch } className="inputSearch" type="text" name="search" placeholder={ languages.searchPlaceSerach } id="idSearch"/>          
           </div>
         </div>
         <div className="elementSearch elementSearchTag">

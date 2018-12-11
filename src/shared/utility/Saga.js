@@ -37,7 +37,7 @@ function getAmiiboData( data ) {
 
     return fetch(encodedURI)
       .then((response) => {
-      	console.log('BienPromise')
+      	
       	setTimeout(function() {
 	        document.getElementById("rootElementLoader").classList.remove("RootElementLoader");
 	      }.bind(this), 500)
@@ -47,7 +47,7 @@ function getAmiiboData( data ) {
       .then( response => response.json() )
       .then( json => json )
       .catch((error) => {
-      	console.log('MalPromise')
+      	
         console.warn(error)
         return null
     });
@@ -75,13 +75,11 @@ function* dataFlow (request) {
 
   try {
 
-  	console.log('Bien')
   	yield put({ type: 'DATA_SUCCESS', data: dataEmpty })
     data = yield call(getAmiiboData, request)
 	yield put({ type: 'DATA_SUCCESS', data: data.amiibo })
 
   } catch (error) {
-    console.log('Mal')
     yield put({ type: 'DATA_SUCCESS', data: dataEmpty})
 
   }
