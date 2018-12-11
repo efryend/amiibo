@@ -7,9 +7,23 @@ function* indexUpAsync() {
   yield put({ type: "INDEX_UP_ASYNC", value: 1 });
 }
 
-function getAmiiboData( data ) {
+const dataEmpty = [
+      {
+        image: '/img/notfound.png',
+        name: '-',
+        gameSeries: '-',
+        character:'-',
+        type: '-',
+        release:{
+          'au': '-',
+          'eu': '-',
+          'jp': '-',
+          'na': '-'
+        }
+      }
+    ]
 
-	document.getElementById("rootElementLoader").classList.add("RootElementLoader");
+function getAmiiboData( data ) {
 
 	var amiiboType = data.amiiboType
 	var amiiboUniverse = data.amiiboUniverse
@@ -39,7 +53,7 @@ function getAmiiboData( data ) {
       .then((response) => {
       	
       	setTimeout(function() {
-	        document.getElementById("rootElementLoader").classList.remove("RootElementLoader");
+	        
 	      }.bind(this), 500)
       	if (!response.ok) throw Error(response.statusText)
   		return response
@@ -57,21 +71,6 @@ function getAmiiboData( data ) {
 function* dataFlow (request) {
 
   let data
-  let dataEmpty = [
-      {
-        image: '/img/notfound.png',
-        name: '-',
-        gameSeries: '-',
-        character:'-',
-        type: '-',
-        release:{
-          'au': '-',
-          'eu': '-',
-          'jp': '-',
-          'na': '-'
-        }
-      }
-    ]
 
   try {
 
@@ -84,7 +83,6 @@ function* dataFlow (request) {
 
   }
 
-  // return the token for health and wealth
   return true
 }
 
@@ -99,23 +97,15 @@ function concatGet( string ) {
 	return newParam
 }
 
-/*
-export function* watchAgeUp() {
-
-  yield takeLatest("INDEX_UP_UP", indexUpAsync);
-
-}
-*/
 
 export function* watchFetchData(){
 
 	while (true) {
 
+		yield put({ type: 'ELEMENTS_REQUESTING', data: dataEmpty })
 		const { amiiboType, amiiboUniverse, amiiboName } = yield take('ELEMENTS_REQUESTING')
 		const task = yield fork(dataFlow, amiiboType, amiiboUniverse, amiiboName)
 
 	}
-
-	//yield takeLatest('FETCH_REQUESTED', fetchData)
 
 }

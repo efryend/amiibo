@@ -40,9 +40,19 @@ class Home extends Component {
     }
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.fetchAmiiboStart()
     this.fetchAmiiboElements()
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevProps.requestSuccessful !== this.props.requestSuccessful) {
+      
+      setTimeout( () => {
+        document.getElementById("rootElementLoader").classList.remove("RootElementLoader");
+      }, 500)
+
+    }
   }
 
   fetchAmiiboStart() {
@@ -76,6 +86,8 @@ class Home extends Component {
 
   handleChangeType( e ){
 
+    document.getElementById("rootElementLoader").classList.add("RootElementLoader");
+
     var type = e.target.value
 
     const state = this.state
@@ -88,6 +100,8 @@ class Home extends Component {
 
   handleChangeUniverse( e ){
 
+    document.getElementById("rootElementLoader").classList.add("RootElementLoader");
+
     var univers = e.target.value
 
     const state = this.state
@@ -99,6 +113,8 @@ class Home extends Component {
   }
 
   handleChangeSearch( value ) {
+
+    document.getElementById("rootElementLoader").classList.add("RootElementLoader");
 
     var name = value
 
@@ -119,6 +135,8 @@ class Home extends Component {
   }
 
   render() {
+
+    console.log(  this.props.requestSuccessful );
 
     let staticContext = this.props.staticContext
 
@@ -163,7 +181,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    successful: state.successful,
+    requestSuccessful: state.successful,
     amiiboElements: state.data
   };
 };

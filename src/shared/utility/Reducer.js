@@ -54,12 +54,11 @@ const reducer = (state = initialState, action) => {
 
     case 'ELEMENTS_REQUESTING':
       newState.successful = false;
-      newState.data = [];
+      newState.data = action.data;
 
       break;
 
     case 'DATA_SUCCESS':
-
       newState.successful = true;
       newState.data = action.data;
 
