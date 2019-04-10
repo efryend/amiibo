@@ -150,7 +150,7 @@ class ElementData extends Component {
           </div>
         </div>
         <div className="containerFigure">
-          <div className="containerCounter">
+          <div className="containerCounter  ">
             { index + 1 } / { totalEle }
           </div>
           <div className="figureArrow figureArrowLeft" onClick={ this.handleClickLeft }>
