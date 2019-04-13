@@ -17,6 +17,7 @@ class Home extends Component {
     super(props)
 
     this.fetchAmiiboStart     = this.fetchAmiiboStart.bind(this)
+    
     this.fetchAmiiboElements  = this.fetchAmiiboElements.bind(this)
     this.handleChangeType     = this.handleChangeType.bind(this)
     this.handleChangeUniverse = this.handleChangeUniverse.bind(this)
