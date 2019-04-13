@@ -16,8 +16,6 @@ class Home extends Component {
   constructor(props) {
     super(props)
     
-    /*Comida*/
-    
     this.fetchAmiiboStart     = this.fetchAmiiboStart.bind(this)
     this.fetchAmiiboElements  = this.fetchAmiiboElements.bind(this)
     this.handleChangeType     = this.handleChangeType.bind(this)
